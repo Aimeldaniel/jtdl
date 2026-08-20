@@ -1,487 +1,775 @@
 <!DOCTYPE html>
 <html lang="ms" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembekal & Pemproses Buah-Buahan Tropika Malaysia</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            900: '#14532d',
-                        },
-                        amber: {
-                            500: '#f59e0b',
-                        }
-                    }
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malaysia Fruit — Dari Malaysia Ke Dunia</title>
+  <meta name="description" content="Premium Malaysian tropical fruits, sourcing, processing, packaging and export.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: '#12372A',
+            leaf: '#436850',
+            cream: '#F3E9D2',
+            orange: '#E8751A',
+            brown: '#24170F',
+            paper: '#FAF8F3'
+          },
+          fontFamily: {
+            display: ['Arial', 'Helvetica', 'sans-serif'],
+            body: ['Inter', 'Arial', 'sans-serif']
+          }
         }
-    </script>
-    <style>
-        .glass-header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --forest:#12372A;
+      --leaf:#436850;
+      --cream:#F3E9D2;
+      --orange:#E8751A;
+      --brown:#24170F;
+      --paper:#FAF8F3;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      background:var(--paper);
+      color:var(--brown);
+      font-family:Inter, Arial, sans-serif;
+      overflow-x:hidden;
+    }
+
+    .display {
+      font-family:Arial, Helvetica, sans-serif;
+      letter-spacing:-0.065em;
+    }
+
+    .grain {
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:100;
+      opacity:.055;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+    }
+
+    .nav-glass {
+      background:rgba(250,248,243,.78);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(36,23,15,.08);
+    }
+
+    .hero-overlay {
+      background:
+        linear-gradient(180deg, rgba(18,55,42,.18) 0%, rgba(18,55,42,.10) 35%, rgba(18,55,42,.82) 100%);
+    }
+
+    .reveal {
+      opacity:0;
+      transform:translateY(45px);
+    }
+
+    .image-reveal {
+      clip-path:inset(100% 0 0 0);
+    }
+
+    .marquee {
+      white-space:nowrap;
+      animation:marquee 24s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform:translateX(0); }
+      to { transform:translateX(-50%); }
+    }
+
+    .fruit-card {
+      min-width:min(78vw, 620px);
+      height:min(68vh, 650px);
+    }
+
+    .fruit-card img {
+      transition:transform 1s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .fruit-card:hover img { transform:scale(1.07); }
+
+    .process-line {
+      width:0;
+    }
+
+    .magnetic { transition:transform .25s ease; }
+
+    .cursor-dot {
+      position:fixed;
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      background:var(--orange);
+      pointer-events:none;
+      z-index:200;
+      transform:translate(-50%,-50%);
+      mix-blend-mode:multiply;
+      display:none;
+    }
+
+    @media (min-width:768px) {
+      .cursor-dot { display:block; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after {
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+        scroll-behavior:auto !important;
+      }
+      .reveal { opacity:1; transform:none; }
+      .image-reveal { clip-path:none; }
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans">
 
-    <!-- 01. NAVIGATION -->
-    <header class="fixed top-0 left-0 right-0 z-50 glass-header border-b border-slate-200/80 transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2 font-bold text-2xl text-brand-900 tracking-tight">
-                <i data-lucide="sprout" class="w-8 h-8 text-brand-600"></i>
-                <span>MALAYSIA<span class="text-brand-600">FRUIT</span></span>
-            </a>
-            
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                <a href="#about" class="hover:text-brand-600 transition">Tentang Kami</a>
-                <a href="#services" class="hover:text-brand-600 transition">Perkhidmatan</a>
-                <a href="#products" class="hover:text-brand-600 transition">Produk</a>
-                <a href="#supply-chain" class="hover:text-brand-600 transition">Rantaian Pembekalan</a>
-                <a href="#certifications" class="hover:text-brand-600 transition">Kualiti</a>
-                <a href="#facility" class="hover:text-brand-600 transition">Fasiliti</a>
-            </nav>
+<body>
+<div class="grain"></div>
+<div id="cursor" class="cursor-dot"></div>
 
-            <div class="flex items-center gap-4">
-                <a href="#contact" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/20 transition">
-                    Hubungi Kami
-                </a>
-            </div>
+<!-- NAVIGATION -->
+<header id="navbar" class="fixed top-0 left-0 right-0 z-[90] transition-all duration-300">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="h-20 md:h-24 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-full bg-forest text-white grid place-items-center">
+          <i data-lucide="sprout" class="w-5 h-5"></i>
+        </span>
+        <span class="font-black tracking-tight text-lg md:text-xl">MALAYSIA<span class="text-orange">FRUIT</span></span>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold">
+        <a href="#story" class="nav-link hover:text-orange transition">Cerita</a>
+        <a href="#fruits" class="nav-link hover:text-orange transition">Buah</a>
+        <a href="#services" class="nav-link hover:text-orange transition">Apa Kami Buat</a>
+        <a href="#process" class="nav-link hover:text-orange transition">Proses</a>
+        <a href="#quality" class="nav-link hover:text-orange transition">Kualiti</a>
+      </nav>
+
+      <a href="#contact" class="magnetic hidden sm:inline-flex bg-forest text-white px-5 py-3 rounded-full text-sm font-bold hover:bg-orange transition">
+        Mari Bekerjasama
+      </a>
+
+      <button id="menuBtn" class="lg:hidden w-11 h-11 rounded-full bg-forest text-white grid place-items-center" aria-label="Buka menu">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobileMenu" class="fixed inset-0 z-[80] bg-forest text-white translate-x-full transition-transform duration-500 lg:hidden">
+  <div class="p-6 pt-28 flex flex-col gap-6 text-3xl font-black display">
+    <a href="#story">CERITA</a>
+    <a href="#fruits">BUAH</a>
+    <a href="#services">APA KAMI BUAT</a>
+    <a href="#process">PROSES</a>
+    <a href="#quality">KUALITI</a>
+    <a href="#contact" class="text-orange">HUBUNGI KAMI</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="home" class="relative min-h-screen h-[100svh] overflow-hidden bg-forest text-white">
+  <img
+    src="https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&q=90&w=2200"
+    class="absolute inset-0 w-full h-full object-cover scale-105"
+    alt="Buah tropika"
+  >
+  <div class="absolute inset-0 hero-overlay"></div>
+
+  <div class="relative z-10 max-w-[1500px] mx-auto px-5 md:px-8 h-full flex flex-col justify-end pb-12 md:pb-20">
+    <div class="max-w-6xl">
+      <p class="hero-item uppercase tracking-[.35em] text-xs md:text-sm font-bold mb-5 text-cream">
+        Buah tropika Malaysia • Sejak 2018
+      </p>
+      <h1 class="display hero-item text-[16vw] md:text-[10vw] leading-[.78] font-black uppercase">
+        Dari<br><span class="text-cream">Malaysia.</span>
+      </h1>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-8">
+        <p class="hero-item max-w-xl text-base md:text-xl leading-relaxed text-white/85">
+          Kami menghubungkan hasil terbaik dari ladang Malaysia dengan pasaran tempatan dan dunia —
+          daripada sumber, pemprosesan, pembungkusan sehingga eksport.
+        </p>
+        <a href="#fruits" class="hero-item magnetic inline-flex items-center gap-3 w-fit bg-orange text-white rounded-full px-6 py-4 font-bold">
+          Terokai Buah Kami
+          <span class="w-8 h-8 rounded-full bg-white/20 grid place-items-center">
+            <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-5 right-6 z-10 hidden md:flex items-center gap-3 text-xs uppercase tracking-[.25em] text-white/70">
+    <span>Scroll to explore</span>
+    <span class="w-12 h-px bg-white/40"></span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="bg-orange text-white overflow-hidden py-5">
+  <div class="marquee flex gap-10 text-xl md:text-3xl font-black uppercase tracking-tight">
+    <span>Fresh</span><span>•</span><span>Tropical</span><span>•</span><span>Malaysian</span><span>•</span>
+    <span>Processed</span><span>•</span><span>Export</span><span>•</span><span>Fresh</span><span>•</span>
+    <span>Tropical</span><span>•</span><span>Malaysian</span><span>•</span><span>Processed</span><span>•</span>
+    <span>Export</span><span>•</span>
+  </div>
+</div>
+
+<!-- STORY -->
+<section id="story" class="py-28 md:py-40 bg-paper">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+      <div class="lg:col-span-4">
+        <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-5">01 — Cerita Kami</p>
+        <h2 class="reveal display text-5xl md:text-7xl font-black uppercase leading-[.88]">
+          Buah yang baik,<br><span class="text-leaf">bermula dari asal.</span>
+        </h2>
+      </div>
+
+      <div class="lg:col-span-8">
+        <p class="reveal text-2xl md:text-4xl leading-tight font-semibold max-w-4xl">
+          Kami percaya buah Malaysia mempunyai cerita tersendiri. Cerita tentang tanah,
+          petani, musim, rasa dan cara ia sampai ke meja pelanggan.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-10 mt-14">
+          <div class="reveal">
+            <p class="text-6xl md:text-8xl font-black display text-orange">01</p>
+            <h3 class="text-xl font-black mt-3">Sumber Terpilih</h3>
+            <p class="mt-2 text-brown/60 leading-relaxed">
+              Bekerjasama dengan sumber dan rakan ladang terpilih untuk mendapatkan hasil yang konsisten.
+            </p>
+          </div>
+          <div class="reveal">
+            <p class="text-6xl md:text-8xl font-black display text-leaf">02</p>
+            <h3 class="text-xl font-black mt-3">Dibawa Lebih Jauh</h3>
+            <p class="mt-2 text-brown/60 leading-relaxed">
+              Mengurus proses selepas tuaian supaya produk dapat dipasarkan dengan lebih luas.
+            </p>
+          </div>
         </div>
-    </header>
 
-    <!-- 02. HERO SECTION -->
-    <section class="pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-800 border border-brand-200 mb-6">
-                        <i data-lucide="globe" class="w-3.5 h-3.5 text-brand-600"></i> Eksport Buah Premium Malaysia
-                    </span>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
-                        Dari Malaysia <br class="hidden sm:inline"/>Ke Pasaran <span class="text-brand-600">Dunia.</span>
-                    </h1>
-                    <p class="text-lg text-slate-600 mb-8 max-w-xl leading-relaxed">
-                        Kami membekalkan, memproses dan mengedarkan buah-buahan tropika tempatan berkualiti tinggi daripada sumber ladang terpilih terus kepada pasaran tempatan dan antarabangsa.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#products" class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-lg shadow-brand-600/30 transition gap-2">
-                            Terokai Produk <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </a>
-                        <a href="#contact" class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 transition">
-                            Pertanyaan B2B
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Video / Image Placeholder -->
-                <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-900 group aspect-video lg:aspect-square flex items-center justify-center">
-                    <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&q=80&w=1000" alt="Buah Tropika Malaysia" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition duration-500" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-                    <button class="relative z-10 w-16 h-16 rounded-full bg-white/90 hover:bg-white text-brand-600 flex items-center justify-center shadow-lg transform transition hover:scale-110">
-                        <i data-lucide="play" class="w-6 h-6 fill-current ml-1"></i>
-                    </button>
-                    <div class="absolute bottom-6 left-6 right-6 text-white text-sm font-medium">
-                        🎥 Tonton Video Fasiliti & Pemprosesan Kami
-                    </div>
-                </div>
-            </div>
+        <div class="reveal mt-16 border-t border-brown/15 py-8 flex flex-col sm:flex-row justify-between gap-5">
+          <span class="uppercase tracking-[.2em] text-xs font-bold text-brown/50">Misi Kami</span>
+          <span class="text-xl md:text-2xl font-bold max-w-2xl">
+            Menjadikan hasil tropika Malaysia lebih mudah diakses, dipercayai dan dihargai di seluruh dunia.
+          </span>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 03. OUR STORY (TIMELINE) -->
-    <section id="about" class="py-20 bg-white border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-xs font-bold tracking-widest text-brand-600 uppercase mb-2">Kisah Kami</h2>
-                <p class="text-3xl sm:text-4xl font-bold text-slate-900">Perjalanan Syarikat Dari Ladang Ke Global</p>
-            </div>
+<!-- FRUIT SHOWCASE -->
+<section id="fruits" class="bg-forest text-white py-24 md:py-32 overflow-hidden">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
+      <div>
+        <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-5">02 — Hasil Kami</p>
+        <h2 class="reveal display text-6xl md:text-[9vw] leading-[.8] font-black uppercase">Buah<br>Malaysia.</h2>
+      </div>
+      <p class="reveal max-w-md text-white/65 leading-relaxed">
+        Pilihan buah segar dan produk diproses. Kandungan di bawah boleh digantikan dengan
+        produk sebenar syarikat.
+      </p>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
-                <!-- Timeline Items -->
-                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 relative">
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-brand-100 text-brand-700">2018</span>
-                    <h3 class="text-lg font-bold text-slate-900 mt-4 mb-2">Penubuhan</h3>
-                    <p class="text-sm text-slate-600">Syarikat ditubuhkan dengan fokus awal pada pengumpulan buah durian dan tropika tempatan.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 relative">
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-brand-100 text-brand-700">2020</span>
-                    <h3 class="text-lg font-bold text-slate-900 mt-4 mb-2">Rangkaian Ladang</h3>
-                    <p class="text-sm text-slate-600">Memperluaskan jaringan kerjasama dengan pekebun dan ladang tempatan di seluruh Malaysia.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 relative">
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-brand-100 text-brand-700">2022</span>
-                    <h3 class="text-lg font-bold text-slate-900 mt-4 mb-2">Pusat Pemprosesan</h3>
-                    <p class="text-sm text-slate-600">Membuka kilang pemprosesan dan pembungkusan moden berteknologi tinggi.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 relative">
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-brand-100 text-brand-700">2024</span>
-                    <h3 class="text-lg font-bold text-slate-900 mt-4 mb-2">Pasaran Eksport</h3>
-                    <p class="text-sm text-slate-600">Mula mengeksport produk buah beku dan segar ke Asia Tenggara & China.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-brand-900 text-white relative">
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-brand-700 text-white">2026</span>
-                    <h3 class="text-lg font-bold text-white mt-4 mb-2">Penjelajahan Global</h3>
-                    <p class="text-sm text-brand-100">Memperluas rantaian pembekalan buah-buahan Malaysia ke peringkat antarabangsa.</p>
-                </div>
-            </div>
+    <div id="fruitTrack" class="flex gap-6 md:gap-8 overflow-x-auto pb-8 snap-x snap-mandatory [scrollbar-width:none]">
+      <article class="fruit-card snap-start relative rounded-[2rem] overflow-hidden shrink-0 group">
+        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=90&w=1200"
+             class="absolute inset-0 w-full h-full object-cover" alt="Durian">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+        <div class="relative h-full p-7 md:p-10 flex flex-col justify-end">
+          <span class="text-xs font-black uppercase tracking-[.25em] text-cream">01 / Premium</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-3">Durian</h3>
+          <p class="mt-2 text-white/75">Musang King • D197</p>
+          <a href="#contact" class="mt-6 w-fit inline-flex items-center gap-3 font-bold">
+            Pertanyaan bekalan <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
         </div>
-    </section>
+      </article>
 
-    <!-- 04. WHAT WE DO (SERVICES & OEM) -->
-    <section id="services" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-xs font-bold tracking-widest text-brand-600 uppercase mb-2">Perkhidmatan</h2>
-                <p class="text-3xl sm:text-4xl font-bold text-slate-900">Kepakaran & Operasi Utama Kami</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Service Cards -->
-                <div class="p-8 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-6">
-                        <i data-lucide="sprout" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">🌱 Sourcing & Farm</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">Mendapatkan buah-buahan segar berkualiti tinggi terus daripada ladang terpilih yang mengamalkan MyGAP.</p>
-                </div>
-
-                <div class="p-8 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-6">
-                        <i data-lucide="factory" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">🏭 Processing (Pemprosesan)</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">Pemprosesan profesional merangkumi Frozen Fruit, Fruit Pulp, Puree, Paste, dan teknologi IQF.</p>
-                </div>
-
-                <div class="p-8 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-6">
-                        <i data-lucide="package" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">📦 Packaging & OEM</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">Pembungkusan khusus mengikut spesifikasi jenama anda (Private Label) dari formulasi hingga pembungkusan.</p>
-                </div>
-
-                <div class="p-8 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-6">
-                        <i data-lucide="truck" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">🚚 Distribution & Cold Chain</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">Penghantaran dengan kawalan suhu ketat untuk memastikan kesegaran buah terjamin sehingga ke destinasi.</p>
-                </div>
-
-                <div class="p-8 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center mb-6">
-                        <i data-lucide="globe-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">🌏 Global Export</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">Pengurusan dokumen eksport, kelulusan fitosanitasi, dan penghantaran kontena ke pasaran antarabangsa.</p>
-                </div>
-
-                <div class="p-8 rounded-2xl bg-brand-900 text-white shadow-sm flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-semibold px-2 py-1 rounded bg-brand-700 text-brand-100 uppercase">Perkhidmatan Khas</span>
-                        <h3 class="text-xl font-bold text-white mt-3 mb-3">Berminat dengan Rakan OEM?</h3>
-                        <p class="text-brand-100 text-sm leading-relaxed">Kami sedia membantu daripada idea produk, pemprosesan, sehingga pembungkusan berjenama anda sendiri.</p>
-                    </div>
-                    <a href="#contact" class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-300 hover:text-white transition">
-                        Bincang Projek OEM <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                    </a>
-                </div>
-            </div>
+      <article class="fruit-card snap-start relative rounded-[2rem] overflow-hidden shrink-0 group">
+        <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&q=90&w=1200"
+             class="absolute inset-0 w-full h-full object-cover" alt="Nanas">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+        <div class="relative h-full p-7 md:p-10 flex flex-col justify-end">
+          <span class="text-xs font-black uppercase tracking-[.25em] text-cream">02 / Tropical</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-3">Nanas</h3>
+          <p class="mt-2 text-white/75">MD2 • Segar • Diproses</p>
+          <a href="#contact" class="mt-6 w-fit inline-flex items-center gap-3 font-bold">
+            Pertanyaan bekalan <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
         </div>
-    </section>
+      </article>
 
-    <!-- 05. OUR PRODUCTS -->
-    <section id="products" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
-                <div>
-                    <h2 class="text-xs font-bold tracking-widest text-brand-600 uppercase mb-2">Katalog Produk</h2>
-                    <p class="text-3xl sm:text-4xl font-bold text-slate-900">Buah-Buahan Premium Kami</p>
-                </div>
-                <!-- Filter Tabs -->
-                <div class="mt-6 md:mt-0 flex flex-wrap gap-2">
-                    <button class="px-4 py-2 rounded-lg text-sm font-semibold bg-brand-600 text-white">Semua</button>
-                    <button class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Durian</button>
-                    <button class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Buah Tropika</button>
-                    <button class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200">Segar / Beku</button>
-                </div>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-lg transition">
-                    <div class="h-48 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=600" alt="Musang King Durian" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                        <span class="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-md">PREMIUM</span>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg text-slate-900">Durian Musang King (D197)</h3>
-                        <p class="text-xs text-slate-500 mb-3">Segar / Nitrogen Frozen Paste & Whole Fruit</p>
-                        <p class="text-sm text-slate-600 line-clamp-2 mb-4">Tekstur krim yang kaya dengan rasa manis-pahit yang seimbang, ikon durian Malaysia.</p>
-                        <a href="#contact" class="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">Pertanyaan Bekalan <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-lg transition">
-                    <div class="h-48 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&q=80&w=600" alt="Nanas MD2" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg text-slate-900">Nanas Premium MD2</h3>
-                        <p class="text-xs text-slate-500 mb-3">Buah Segar / Cut Fruit / Puri</p>
-                        <p class="text-sm text-slate-600 line-clamp-2 mb-4">Sangat manis, kurang asid, berwarna kuning keemasan menarik dan kaya Vitamin C.</p>
-                        <a href="#contact" class="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">Pertanyaan Bekalan <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-lg transition">
-                    <div class="h-48 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&q=80&w=600" alt="Mangga" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg text-slate-900">Mangga Harum Manis</h3>
-                        <p class="text-xs text-slate-500 mb-3">Gred Eksport Musim / Puri</p>
-                        <p class="text-sm text-slate-600 line-clamp-2 mb-4">Aroma unik yang harum serta rasa manis berkrim yang menjadi kegemaran ramai.</p>
-                        <a href="#contact" class="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">Pertanyaan Bekalan <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-lg transition">
-                    <div class="h-48 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1587393855524-087f83d95bc9?auto=format&fit=crop&q=80&w=600" alt="Manggis" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg text-slate-900">Manggis Tempatan</h3>
-                        <p class="text-xs text-slate-500 mb-3">Buah Segar / Pembungkusan Eksport</p>
-                        <p class="text-sm text-slate-600 line-clamp-2 mb-4">Ratu buah-buahan dengan rasa manis masam segar dan berkualiti tinggi.</p>
-                        <a href="#contact" class="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1">Pertanyaan Bekalan <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
-                    </div>
-                </div>
-            </div>
+      <article class="fruit-card snap-start relative rounded-[2rem] overflow-hidden shrink-0 group">
+        <img src="https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&q=90&w=1200"
+             class="absolute inset-0 w-full h-full object-cover" alt="Mangga">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+        <div class="relative h-full p-7 md:p-10 flex flex-col justify-end">
+          <span class="text-xs font-black uppercase tracking-[.25em] text-cream">03 / Seasonal</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-3">Mangga</h3>
+          <p class="mt-2 text-white/75">Segar • Puri • Gred eksport</p>
+          <a href="#contact" class="mt-6 w-fit inline-flex items-center gap-3 font-bold">
+            Pertanyaan bekalan <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
         </div>
-    </section>
+      </article>
 
-    <!-- 06. FROM FARM TO WORLD (PROCESS STORYTELLING) -->
-    <section id="supply-chain" class="py-20 bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-xs font-bold tracking-widest text-brand-500 uppercase mb-2">Rantaian Pembekalan</h2>
-                <p class="text-3xl sm:text-4xl font-bold text-white">Dari Ladang Ke Pasaran Dunia</p>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 text-center">
-                <div class="p-6 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col items-center">
-                    <span class="text-brand-500 text-2xl font-black mb-2">01</span>
-                    <h4 class="font-bold text-sm mb-1">LADANG</h4>
-                    <p class="text-xs text-slate-400">Penyumberan dari ladang MyGAP terpilih</p>
-                </div>
-                <div class="p-6 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col items-center">
-                    <span class="text-brand-500 text-2xl font-black mb-2">02</span>
-                    <h4 class="font-bold text-sm mb-1">TUAIAN</h4>
-                    <p class="text-xs text-slate-400">Dituai pada tahap kematangan optimum</p>
-                </div>
-                <div class="p-6 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col items-center">
-                    <span class="text-brand-500 text-2xl font-black mb-2">03</span>
-                    <h4 class="font-bold text-sm mb-1">PROSES</h4>
-                    <p class="text-xs text-slate-400">Pengasingan gred & pemprosesan bersih</p>
-                </div>
-                <div class="p-6 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col items-center">
-                    <span class="text-brand-500 text-2xl font-black mb-2">04</span>
-                    <h4 class="font-bold text-sm mb-1">BUNGKUS</h4>
-                    <p class="text-xs text-slate-400">Standard pembungkusan & OEM kualiti</p>
-                </div>
-                <div class="p-6 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col items-center">
-                    <span class="text-brand-500 text-2xl font-black mb-2">05</span>
-                    <h4 class="font-bold text-sm mb-1">RANTAIAN SEJUK</h4>
-                    <p class="text-xs text-slate-400">Kawalan suhu cecair Nitrogen/IQF</p>
-                </div>
-                <div class="p-6 rounded-xl bg-brand-600 border border-brand-500 flex flex-col items-center">
-                    <span class="text-white text-2xl font-black mb-2">06</span>
-                    <h4 class="font-bold text-sm mb-1">EKSPORT</h4>
-                    <p class="text-xs text-brand-100">Dihantar terus ke pasaran antarabangsa</p>
-                </div>
-            </div>
+      <article class="fruit-card snap-start relative rounded-[2rem] overflow-hidden shrink-0 group">
+        <img src="https://images.unsplash.com/photo-1587393855524-087f83d95bc9?auto=format&fit=crop&q=90&w=1200"
+             class="absolute inset-0 w-full h-full object-cover" alt="Manggis">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+        <div class="relative h-full p-7 md:p-10 flex flex-col justify-end">
+          <span class="text-xs font-black uppercase tracking-[.25em] text-cream">04 / Fresh</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-3">Manggis</h3>
+          <p class="mt-2 text-white/75">Segar • Pembungkusan eksport</p>
+          <a href="#contact" class="mt-6 w-fit inline-flex items-center gap-3 font-bold">
+            Pertanyaan bekalan <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
         </div>
-    </section>
+      </article>
+    </div>
 
-    <!-- 07. QUALITY & CERTIFICATIONS -->
-    <section id="certifications" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <h2 class="text-xs font-bold tracking-widest text-brand-600 uppercase mb-2">Jaminan Kualiti</h2>
-                <p class="text-3xl sm:text-4xl font-bold text-slate-900">Pensijilan & Standard Antarabangsa</p>
-            </div>
+    <div class="mt-5 flex items-center gap-3 text-white/40 text-xs uppercase tracking-[.2em]">
+      <span class="w-16 h-px bg-white/30"></span> Swipe / scroll untuk lihat produk
+    </div>
+  </div>
+</section>
 
-            <!-- Certification Badges Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 text-center">
-                <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center font-bold text-slate-800">
-                    <i data-lucide="award" class="w-8 h-8 text-brand-600 mb-2"></i>
-                    HALAL
-                </div>
-                <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center font-bold text-slate-800">
-                    <i data-lucide="shield-check" class="w-8 h-8 text-brand-600 mb-2"></i>
-                    HACCP
-                </div>
-                <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center font-bold text-slate-800">
-                    <i data-lucide="check-circle" class="w-8 h-8 text-brand-600 mb-2"></i>
-                    GMP
-                </div>
-                <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center font-bold text-slate-800">
-                    <i data-lucide="verified" class="w-8 h-8 text-brand-600 mb-2"></i>
-                    MeSTI
-                </div>
-                <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center font-bold text-slate-800">
-                    <i data-lucide="leaf" class="w-8 h-8 text-brand-600 mb-2"></i>
-                    MyGAP
-                </div>
-                <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center font-bold text-slate-800">
-                    <i data-lucide="badge-check" class="w-8 h-8 text-brand-600 mb-2"></i>
-                    FSSC 22000
-                </div>
-            </div>
+<!-- SERVICES -->
+<section id="services" class="bg-cream py-28 md:py-40">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="grid lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-4">
+        <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-5">03 — Apa Kami Buat</p>
+        <h2 class="reveal display text-6xl md:text-[8vw] leading-[.82] font-black uppercase">
+          More than<br><span class="text-leaf">fruit.</span>
+        </h2>
+      </div>
+
+      <div class="lg:col-span-8 divide-y divide-brown/15">
+        <div class="service-row reveal py-9 grid md:grid-cols-12 gap-6 items-start">
+          <span class="md:col-span-1 text-orange font-black">01</span>
+          <h3 class="md:col-span-4 display text-3xl md:text-5xl font-black uppercase">Sourcing</h3>
+          <p class="md:col-span-7 text-brown/65 leading-relaxed">Penyumberan buah daripada ladang dan rakan pembekal terpilih mengikut keperluan pasaran.</p>
         </div>
-    </section>
-
-    <!-- 08. OUR FACILITY (STATS) -->
-    <section id="facility" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-4 gap-8">
-                <div class="p-8 rounded-2xl bg-brand-50 border border-brand-100 text-center">
-                    <p class="text-4xl font-extrabold text-brand-700 mb-2">12,500 m²</p>
-                    <p class="text-sm font-semibold text-slate-700">Keluasan Fasiliti Pemprosesan</p>
-                </div>
-                <div class="p-8 rounded-2xl bg-brand-50 border border-brand-100 text-center">
-                    <p class="text-4xl font-extrabold text-brand-700 mb-2">300 MT</p>
-                    <p class="text-sm font-semibold text-slate-700">Kapasiti Pemprosesan Bulanan</p>
-                </div>
-                <div class="p-8 rounded-2xl bg-brand-50 border border-brand-100 text-center">
-                    <p class="text-4xl font-extrabold text-brand-700 mb-2">4 Units</p>
-                    <p class="text-sm font-semibold text-slate-700">Bilik Sejuk Beku (Cold Storage)</p>
-                </div>
-                <div class="p-8 rounded-2xl bg-brand-50 border border-brand-100 text-center">
-                    <p class="text-4xl font-extrabold text-brand-700 mb-2">15+</p>
-                    <p class="text-sm font-semibold text-slate-700">Pasaran Eksport Antarabangsa</p>
-                </div>
-            </div>
+        <div class="service-row reveal py-9 grid md:grid-cols-12 gap-6 items-start">
+          <span class="md:col-span-1 text-orange font-black">02</span>
+          <h3 class="md:col-span-4 display text-3xl md:text-5xl font-black uppercase">Processing</h3>
+          <p class="md:col-span-7 text-brown/65 leading-relaxed">Pemprosesan seperti buah beku, pulp, puree, paste atau format lain mengikut kemampuan sebenar syarikat.</p>
         </div>
-    </section>
-
-    <!-- 09. B2B CALL TO ACTION & CONTACT -->
-    <section id="contact" class="py-20 bg-slate-900 text-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12">
-                <div>
-                    <h2 class="text-xs font-bold tracking-widest text-brand-500 uppercase mb-2">Hubungi Kami</h2>
-                    <p class="text-3xl sm:text-4xl font-bold text-white mb-6">Jom Bekerjasama & Kembangkan Perniagaan Anda</p>
-                    <p class="text-slate-400 mb-8 leading-relaxed">
-                        Kami membekalkan untuk pemborong, pengeluar makanan, rangkaian pasar raya, perhotelan, serta rakan kongsi eksport antarabangsa.
-                    </p>
-
-                    <div class="space-y-4">
-                        <div class="flex items-start gap-4">
-                            <div class="p-3 rounded-lg bg-slate-800 text-brand-500">
-                                <i data-lucide="map-pin" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-sm">Alamat Ibu Pejabat / Kilang</h4>
-                                <p class="text-xs text-slate-400">Kawasan Perindustrian Food Hub, Selangor, Malaysia.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="p-3 rounded-lg bg-slate-800 text-brand-500">
-                                <i data-lucide="mail" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-sm">Emel Pertanyaan B2B</h4>
-                                <p class="text-xs text-slate-400">export@malaysiafruit.com / sales@malaysiafruit.com</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4">
-                            <div class="p-3 rounded-lg bg-slate-800 text-brand-500">
-                                <i data-lucide="phone" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-sm">Telefon / WhatsApp</h4>
-                                <p class="text-xs text-slate-400">+60 3-8000 0000 / +60 12-345 6789</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Simple Inquiry Form -->
-                <div class="bg-white text-slate-900 p-8 rounded-3xl shadow-xl">
-                    <h3 class="text-xl font-bold mb-6">Borang Pertanyaan Perniagaan</h3>
-                    <form class="space-y-4" onsubmit="event.preventDefault(); alert('Terima kasih! Pertanyaan anda telah dihantar.');">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama / Nama Syarikat</label>
-                            <input type="text" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm" placeholder="Contoh: Syarikat ABC Sdn Bhd" />
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Emel</label>
-                                <input type="email" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm" placeholder="nama@company.com" />
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">No. Telefon</label>
-                                <input type="tel" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm" placeholder="+60..." />
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jenis Pertanyaan</label>
-                            <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm">
-                                <option>Eksport Antarabangsa</option>
-                                <option>Bekalan Tempatan / Pemborong</option>
-                                <option>Perkhidmatan OEM / Private Label</option>
-                                <option>Lain-Lain</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Mesej / Keperluan Produk</label>
-                            <textarea rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm" placeholder="Nyatakan produk yang dicari, anggaran kuantiti, dll."></textarea>
-                        </div>
-                        <button type="submit" class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition">
-                            Hantar Pertanyaan
-                        </button>
-                    </form>
-                </div>
-            </div>
+        <div class="service-row reveal py-9 grid md:grid-cols-12 gap-6 items-start">
+          <span class="md:col-span-1 text-orange font-black">03</span>
+          <h3 class="md:col-span-4 display text-3xl md:text-5xl font-black uppercase">Packaging</h3>
+          <p class="md:col-span-7 text-brown/65 leading-relaxed">Pembungkusan untuk pasaran tempatan, eksport dan private label jika ditawarkan.</p>
         </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="bg-slate-950 text-slate-500 py-8 text-xs border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>&copy; 2026 Malaysia Fruit Company. Hak Cipta Terpelihara.</p>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-slate-300">Dasar Privasi</a>
-                <a href="#" class="hover:text-slate-300">Terma Perkhidmatan</a>
-            </div>
+        <div class="service-row reveal py-9 grid md:grid-cols-12 gap-6 items-start">
+          <span class="md:col-span-1 text-orange font-black">04</span>
+          <h3 class="md:col-span-4 display text-3xl md:text-5xl font-black uppercase">Distribution</h3>
+          <p class="md:col-span-7 text-brown/65 leading-relaxed">Pengurusan penghantaran dan rantaian sejuk bagi memastikan produk sampai dalam keadaan yang baik.</p>
         </div>
-    </footer>
+        <div class="service-row reveal py-9 grid md:grid-cols-12 gap-6 items-start">
+          <span class="md:col-span-1 text-orange font-black">05</span>
+          <h3 class="md:col-span-4 display text-3xl md:text-5xl font-black uppercase">Export</h3>
+          <p class="md:col-span-7 text-brown/65 leading-relaxed">Sokongan pembekalan untuk pasaran antarabangsa berdasarkan negara dan keupayaan eksport sebenar syarikat.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Initialize Lucide Icons -->
-    <script>
-        lucide.createIcons();
-    </script>
+<!-- MALAYSIA / BRAND STATEMENT -->
+<section class="relative min-h-[80vh] overflow-hidden bg-brown text-white">
+  <img src="https://images.unsplash.com/photo-1539478255677-0a2a1a9b4f5c?auto=format&fit=crop&q=90&w=2200"
+       class="absolute inset-0 w-full h-full object-cover opacity-45" alt="Ladang tropika">
+  <div class="absolute inset-0 bg-brown/60"></div>
+
+  <div class="relative z-10 max-w-[1500px] mx-auto px-5 md:px-8 min-h-[80vh] flex items-center">
+    <div>
+      <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-6">04 — Our Origin</p>
+      <h2 class="reveal display text-[14vw] md:text-[10vw] leading-[.78] font-black uppercase">
+        Born<br><span class="text-cream">here.</span>
+      </h2>
+      <p class="reveal max-w-2xl text-xl md:text-2xl text-white/75 mt-10 leading-relaxed">
+        Malaysia mempunyai kepelbagaian buah tropika yang luar biasa.
+        Kami membawa cerita dan hasil ini lebih jauh.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="bg-forest text-white py-28 md:py-40">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="mb-20">
+      <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-5">05 — Dari Ladang Ke Dunia</p>
+      <h2 class="reveal display text-6xl md:text-[9vw] leading-[.8] font-black uppercase">
+        From farm<br>to world.
+      </h2>
+    </div>
+
+    <div class="relative">
+      <div class="absolute left-[24px] md:left-[50%] top-0 bottom-0 w-px bg-white/10"></div>
+
+      <div class="process-step relative min-h-[260px] flex items-center">
+        <div class="w-full md:w-1/2 md:pr-20 pl-16 md:pl-0 md:text-right">
+          <span class="text-orange text-sm font-black">01</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-2">Farm</h3>
+          <p class="text-white/55 mt-3 max-w-md md:ml-auto">Sumber dan rakan ladang terpilih.</p>
+        </div>
+        <div class="absolute left-[12px] md:left-[calc(50%-12px)] w-6 h-6 rounded-full bg-orange border-4 border-forest"></div>
+      </div>
+
+      <div class="process-step relative min-h-[260px] flex items-center">
+        <div class="w-full md:w-1/2 md:ml-auto md:pl-20 pl-16">
+          <span class="text-orange text-sm font-black">02</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-2">Harvest</h3>
+          <p class="text-white/55 mt-3 max-w-md">Pemilihan hasil pada tahap yang sesuai.</p>
+        </div>
+        <div class="absolute left-[12px] md:left-[calc(50%-12px)] w-6 h-6 rounded-full bg-orange border-4 border-forest"></div>
+      </div>
+
+      <div class="process-step relative min-h-[260px] flex items-center">
+        <div class="w-full md:w-1/2 md:pr-20 pl-16 md:pl-0 md:text-right">
+          <span class="text-orange text-sm font-black">03</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-2">Process</h3>
+          <p class="text-white/55 mt-3 max-w-md md:ml-auto">Penggredan, pemprosesan dan kawalan kualiti.</p>
+        </div>
+        <div class="absolute left-[12px] md:left-[calc(50%-12px)] w-6 h-6 rounded-full bg-orange border-4 border-forest"></div>
+      </div>
+
+      <div class="process-step relative min-h-[260px] flex items-center">
+        <div class="w-full md:w-1/2 md:ml-auto md:pl-20 pl-16">
+          <span class="text-orange text-sm font-black">04</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-2">Pack</h3>
+          <p class="text-white/55 mt-3 max-w-md">Pembungkusan mengikut keperluan pasaran.</p>
+        </div>
+        <div class="absolute left-[12px] md:left-[calc(50%-12px)] w-6 h-6 rounded-full bg-orange border-4 border-forest"></div>
+      </div>
+
+      <div class="process-step relative min-h-[260px] flex items-center">
+        <div class="w-full md:w-1/2 md:pr-20 pl-16 md:pl-0 md:text-right">
+          <span class="text-orange text-sm font-black">05</span>
+          <h3 class="display text-5xl md:text-7xl font-black uppercase mt-2">Deliver</h3>
+          <p class="text-white/55 mt-3 max-w-md md:ml-auto">Dihantar kepada pelanggan tempatan dan antarabangsa.</p>
+        </div>
+        <div class="absolute left-[12px] md:left-[calc(50%-12px)] w-6 h-6 rounded-full bg-orange border-4 border-forest"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUALITY -->
+<section id="quality" class="bg-paper py-28 md:py-40">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-end">
+      <div>
+        <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-5">06 — Kualiti</p>
+        <h2 class="reveal display text-6xl md:text-[8vw] leading-[.8] font-black uppercase">
+          Quality<br><span class="text-leaf">matters.</span>
+        </h2>
+      </div>
+      <p class="reveal text-xl md:text-2xl leading-relaxed text-brown/65">
+        Paparkan hanya pensijilan dan standard yang benar-benar dimiliki syarikat.
+        Logo boleh digantikan kemudian.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-16">
+      <div class="reveal aspect-square border border-brown/15 rounded-2xl grid place-items-center text-center p-5">
+        <div><i data-lucide="award" class="mx-auto mb-3 text-orange"></i><strong>HALAL</strong></div>
+      </div>
+      <div class="reveal aspect-square border border-brown/15 rounded-2xl grid place-items-center text-center p-5">
+        <div><i data-lucide="shield-check" class="mx-auto mb-3 text-orange"></i><strong>HACCP</strong></div>
+      </div>
+      <div class="reveal aspect-square border border-brown/15 rounded-2xl grid place-items-center text-center p-5">
+        <div><i data-lucide="badge-check" class="mx-auto mb-3 text-orange"></i><strong>GMP</strong></div>
+      </div>
+      <div class="reveal aspect-square border border-brown/15 rounded-2xl grid place-items-center text-center p-5">
+        <div><i data-lucide="check-circle" class="mx-auto mb-3 text-orange"></i><strong>MESTI</strong></div>
+      </div>
+      <div class="reveal aspect-square border border-brown/15 rounded-2xl grid place-items-center text-center p-5">
+        <div><i data-lucide="leaf" class="mx-auto mb-3 text-orange"></i><strong>MyGAP</strong></div>
+      </div>
+      <div class="reveal aspect-square border border-brown/15 rounded-2xl grid place-items-center text-center p-5">
+        <div><i data-lucide="verified" class="mx-auto mb-3 text-orange"></i><strong>FSSC 22000</strong></div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5 mt-20">
+      <div class="reveal bg-forest text-white rounded-3xl p-8 md:p-10">
+        <p class="text-6xl font-black display">20+</p>
+        <p class="mt-2 text-white/60 uppercase tracking-[.15em] text-xs font-bold">Tahun pengalaman</p>
+      </div>
+      <div class="reveal bg-orange text-white rounded-3xl p-8 md:p-10">
+        <p class="text-6xl font-black display">15+</p>
+        <p class="mt-2 text-white/75 uppercase tracking-[.15em] text-xs font-bold">Pasaran eksport</p>
+      </div>
+      <div class="reveal bg-cream rounded-3xl p-8 md:p-10">
+        <p class="text-6xl font-black display">100%</p>
+        <p class="mt-2 text-brown/55 uppercase tracking-[.15em] text-xs font-bold">Fokus kepada kualiti</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITY -->
+<section class="bg-brown text-white py-24">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <div class="rounded-[2rem] overflow-hidden h-[500px] image-reveal">
+        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=90&w=1400"
+             class="w-full h-full object-cover" alt="Fasiliti dan logistik">
+      </div>
+      <div class="lg:pl-10">
+        <p class="reveal uppercase tracking-[.3em] text-xs font-black text-orange mb-5">07 — Fasiliti</p>
+        <h2 class="reveal display text-6xl md:text-8xl leading-[.8] font-black uppercase">Built<br>to deliver.</h2>
+        <p class="reveal text-white/60 text-lg leading-relaxed mt-8 max-w-xl">
+          Gunakan ruang ini untuk memperkenalkan kilang, gudang, cold room,
+          pusat pemprosesan atau fasiliti sebenar syarikat.
+        </p>
+        <a href="#contact" class="reveal magnetic inline-flex mt-8 bg-white text-brown rounded-full px-6 py-4 font-bold">
+          Ketahui lebih lanjut
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="bg-orange text-white py-28 md:py-40">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <p class="reveal uppercase tracking-[.3em] text-xs font-black text-white/70 mb-6">08 — Mari Bekerjasama</p>
+    <h2 class="reveal display text-[13vw] md:text-[9vw] leading-[.78] font-black uppercase max-w-6xl">
+      Let's grow<br>together.
+    </h2>
+
+    <div class="grid lg:grid-cols-2 gap-12 mt-16 items-end">
+      <p class="reveal text-xl md:text-2xl max-w-xl text-white/80">
+        Untuk pertanyaan bekalan, eksport, OEM atau kerjasama perniagaan,
+        hubungi pasukan kami.
+      </p>
+
+      <form class="reveal bg-white text-brown rounded-[2rem] p-7 md:p-9 shadow-2xl"
+            onsubmit="submitForm(event)">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="text-xs font-black uppercase tracking-wider">Nama / Syarikat</label>
+            <input required type="text" class="mt-2 w-full rounded-xl border border-brown/15 px-4 py-3 outline-none focus:border-orange" placeholder="Syarikat ABC Sdn Bhd">
+          </div>
+          <div>
+            <label class="text-xs font-black uppercase tracking-wider">Emel</label>
+            <input required type="email" class="mt-2 w-full rounded-xl border border-brown/15 px-4 py-3 outline-none focus:border-orange" placeholder="nama@company.com">
+          </div>
+          <div>
+            <label class="text-xs font-black uppercase tracking-wider">Telefon</label>
+            <input type="tel" class="mt-2 w-full rounded-xl border border-brown/15 px-4 py-3 outline-none focus:border-orange" placeholder="+60">
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-xs font-black uppercase tracking-wider">Keperluan</label>
+            <select class="mt-2 w-full rounded-xl border border-brown/15 px-4 py-3 outline-none focus:border-orange">
+              <option>Bekalan buah segar</option>
+              <option>Produk beku / diproses</option>
+              <option>OEM / Private Label</option>
+              <option>Eksport</option>
+              <option>Lain-lain</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-xs font-black uppercase tracking-wider">Mesej</label>
+            <textarea rows="4" class="mt-2 w-full rounded-xl border border-brown/15 px-4 py-3 outline-none focus:border-orange" placeholder="Ceritakan keperluan anda..."></textarea>
+          </div>
+        </div>
+        <button class="mt-5 w-full rounded-full bg-forest text-white py-4 font-black hover:bg-brown transition">
+          Hantar Pertanyaan
+        </button>
+        <p id="formMessage" class="hidden text-center text-sm text-leaf mt-4 font-semibold">Terima kasih. Pertanyaan anda telah direkodkan.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-brown text-white py-10">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row justify-between gap-8">
+      <div>
+        <div class="font-black text-xl">MALAYSIA<span class="text-orange">FRUIT</span></div>
+        <p class="text-white/40 mt-2 text-sm">Dari Malaysia ke dunia.</p>
+      </div>
+      <div class="text-sm text-white/50 md:text-right">
+        <p>Alamat syarikat</p>
+        <p>+60 XX-XXXX XXXX</p>
+        <p>sales@company.com</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10 mt-8 pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/35">
+      <span>© 2026 Malaysia Fruit. Hak Cipta Terpelihara.</span>
+      <span>Privacy Policy · Terms</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('translate-x-full');
+    const icon = menuBtn.querySelector('i');
+    if (mobileMenu.classList.contains('translate-x-full')) {
+      icon.setAttribute('data-lucide', 'menu');
+    } else {
+      icon.setAttribute('data-lucide', 'x');
+    }
+    lucide.createIcons();
+  });
+
+  document.querySelectorAll('#mobileMenu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('translate-x-full');
+      menuBtn.querySelector('i').setAttribute('data-lucide', 'menu');
+      lucide.createIcons();
+    });
+  });
+
+  // Navbar on scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 30) {
+      navbar.classList.add('nav-glass', 'shadow-sm');
+    } else {
+      navbar.classList.remove('nav-glass', 'shadow-sm');
+    }
+  });
+
+  // GSAP
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReduced) {
+    gsap.from('.hero-item', {
+      y: 60,
+      opacity: 0,
+      duration: 1.15,
+      stagger: .12,
+      ease: 'power4.out',
+      delay: .25
+    });
+
+    gsap.to('.hero img', {
+      scale: 1,
+      scrollTrigger: {
+        trigger: '#home',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1
+      }
+    });
+
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: .9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          once: true
+        }
+      });
+    });
+
+    gsap.utils.toArray('.image-reveal').forEach(el => {
+      gsap.to(el, {
+        clipPath: 'inset(0% 0 0 0)',
+        duration: 1.2,
+        ease: 'power4.inOut',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 80%',
+          once: true
+        }
+      });
+    });
+
+    gsap.utils.toArray('.process-step').forEach((step, i) => {
+      gsap.from(step, {
+        opacity: 0,
+        x: i % 2 === 0 ? -50 : 50,
+        duration: .8,
+        scrollTrigger: {
+          trigger: step,
+          start: 'top 82%',
+          once: true
+        }
+      });
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    document.querySelectorAll('.image-reveal').forEach(el => {
+      el.style.clipPath = 'none';
+    });
+  }
+
+  // Mouse follower
+  const cursor = document.getElementById('cursor');
+  if (window.innerWidth >= 768 && !prefersReduced) {
+    window.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  }
+
+  // Magnetic buttons
+  document.querySelectorAll('.magnetic').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      if (window.innerWidth < 768) return;
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - (r.left + r.width / 2);
+      const y = e.clientY - (r.top + r.height / 2);
+      btn.style.transform = `translate(${x * .08}px, ${y * .08}px)`;
+    });
+    btn.addEventListener('mouseleave', () => btn.style.transform = '');
+  });
+
+  // Simple contact form demo
+  function submitForm(event) {
+    event.preventDefault();
+    document.getElementById('formMessage').classList.remove('hidden');
+    event.target.reset();
+  }
+</script>
 </body>
 </html>
